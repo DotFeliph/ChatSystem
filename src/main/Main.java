@@ -13,6 +13,9 @@ public class Main {
         boolean is_running = true;
 
         while (is_running) {
+
+
+
             System.out.println("\n==== Chat System Menu ====");
             System.out.println("1. Register user");
             System.out.println("2. Create a new Chat");
@@ -32,7 +35,7 @@ public class Main {
                 continue;
             }
 
-            switch (input) {
+            switch (option) {
                 case 1:
                     if(! register(input)){
                         System.out.println("User not registred.");
@@ -41,7 +44,7 @@ public class Main {
 
                 case 2: // Create new chat
                     if(! createChat(input)){
-                        ///
+                        System.out.println("Chat not created.");
                     }
 
                 case 3: // Send Message
@@ -112,7 +115,11 @@ public class Main {
                 System.out.println("A chat requires at least 2 participants.");
                 continue;
             }
-            ChatSystem.getInstance().initChat(participants);
+            if(! ChatSystem.getInstance().initChat(participants)){
+                System.out.println("Error when creating the chat");
+                System.out.println("Do you want do try agai? [y/n]");
+                return ! (input.nextLine().strip().equalsIgnoreCase("n"));
+            }
             System.out.println("---New chat created---");
             return true;
         }

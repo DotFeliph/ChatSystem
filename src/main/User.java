@@ -1,15 +1,15 @@
 package main;
 
 public class User {
-    private int  id;               // must be unique
+    private int    id;               // must be unique
     private String name;
     private String email;
     private String password;       // more than 6 char
 
     public User(int id, String name, String email, String password) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
+        this.id       = id;
+        this.name     = name;
+        this.email    = email;
         this.password = password;
     }
 

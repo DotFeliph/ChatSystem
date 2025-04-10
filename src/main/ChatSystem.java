@@ -16,7 +16,7 @@ public final class ChatSystem {
     private HashMap<Integer, User>  users    = new HashMap<>();          // store all users
     private ArrayList<Chat>         chats    = new ArrayList<>();        // store all chats
     private static final ChatSystem instance = new ChatSystem();
-    // Instância criada ao carregar a classe
+    // instance created when loading class
 
 
     private ChatSystem(){ }
@@ -105,6 +105,9 @@ public final class ChatSystem {
         return true;
     }
 
+    public void userLogin(){
+
+    }
 
     public HashMap<Integer, User> getUsers() {
         return this.users;
