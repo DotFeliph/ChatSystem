@@ -8,23 +8,20 @@ public class Chat {
     private ArrayList<User>    participants;
     private ArrayList<Message> messages;
 
-    public Chat(){
+    public Chat(ArrayList<Integer> ids){
+
         participants = new ArrayList<>();
         messages = new ArrayList<>();
-    };
-
-    public Chat getChat(){return this;}
-
-    public boolean createChat(User... usr){
-
-        for(User u : usr) {
+        for(Integer id : ids){
+            participants.add(ChatSystem.getInstance().searchUser(id));
 
         }
     }
 
-    public Chat removeUser(User u){
+    public Chat getChat(){return this;}
+
+    public void removeUser(User u){
         participants.remove(u);
-        return this;
     }
 
     public boolean isUserInChat(int id){

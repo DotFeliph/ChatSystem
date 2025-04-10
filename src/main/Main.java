@@ -1,5 +1,6 @@
 package main;
 
+import javax.script.ScriptEngine;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -38,24 +39,10 @@ public class Main {
                     }
                     break;
 
-                case 2: // Create Conversation
-                    System.out.print("Enter participant IDs (comma-separated): ");
-                    String[] participantIds = input.nextLine().split(",");
-                    List<Integer> participants = new ArrayList<>();
-                    for (String id : participantIds) {
-                        try {
-                            participants.add(Integer.parseInt(id.trim()));
-                        } catch (NumberFormatException e) {
-                            System.out.println("Invalid ID: " + id);
-                        }
+                case 2: // Create new chat
+                    if(! createChat(input)){
+                        ///
                     }
-                    try {
-                        chatSystem.criarConversa(participants);
-                        System.out.println("Conversation created!");
-                    } catch (Exception e) {
-                        System.out.println("Error: " + e.getMessage());
-                    }
-                    break;
 
                 case 3: // Send Message
                     System.out.print("Enter conversation ID: ");
@@ -65,7 +52,7 @@ public class Main {
                     System.out.print("Enter message: ");
                     String message = input.nextLine();
                     try {
-                        chatSystem.enviarMensagem(conversationId, userId, message);
+//                        chatSystem.enviarMensagem(conversationId, userId, message);
                         System.out.println("Message sent!");
                     } catch (Exception e) {
                         System.out.println("Error: " + e.getMessage());
@@ -73,22 +60,22 @@ public class Main {
                     break;
 
                 case 4: // Delete user
-                    if(! delete(input)){
-                        // didn`t delete
+                    if(! deleteChat(input)){
+                        System.out.println("---User not deleted---");
                     }
 
                 case 5: // Display Conversation
                     System.out.print("Enter conversation ID: ");
                     int displayConvId = Integer.parseInt(input.nextLine());
                     try {
-                        chatSystem.exibirConversa(displayConvId);
+//                        chatSystem.exibirConversa(displayConvId);
                     } catch (Exception e) {
                         System.out.println("Error: " + e.getMessage());
                     }
                     break;
 
                 case 6: // Exit
-                    isRunning = false;
+//                    isRunning = false;
                     System.out.println("Exiting...");
                     break;
 
@@ -99,14 +86,66 @@ public class Main {
         input.close();
     }
 
-    public static boolean delete(Scanner input){
+    public static boolean createChat(Scanner input){
+        ArrayList<Integer> participants = new ArrayList<>();
 
+        while (true){
+            System.out.println("---New chat---");
+            ChatSystem.getInstance().listAllUsers();
+            System.out.println("[To return to te menu type '0']");
+            System.out.print("Enter participant IDs (comma-separated): ");
+
+            String inp = input.nextLine().strip();
+            if (inp.equals("0")) return false;
+
+            String[] participant_ids =inp.split(",");
+            participants.clear();
+
+            for (String id : participant_ids) {
+                if(! ChatSystem.getInstance().validateUserId(id)) {
+                    System.out.println("Invalid ID: " + id);
+                }
+                else participants.add( Integer.parseInt(id.strip()) );
+            }
+
+            if (participants.size() < 2){
+                System.out.println("A chat requires at least 2 participants.");
+                continue;
+            }
+            ChatSystem.getInstance().initChat(participants);
+            System.out.println("---New chat created---");
+            return true;
+        }
+    }
+
+
+    public static boolean deleteChat(Scanner input){
+        while (true){
+            System.out.println("---Deleting User---");
+            System.out.println("[To return to the menu type '0']");
+            System.out.print("Enter user ID: ");
+
+            String del_user_id = input.nextLine().strip();
+            if(del_user_id.equals("0")) return false;
+
+            if(! ChatSystem.getInstance().validateUserId(del_user_id)){
+                System.out.println("Invalid user id, try another one.");
+                continue;
+            }
+
+            if(! ChatSystem.getInstance().deleteUser(del_user_id)){
+                System.out.println("User not found. Want to try again? [Y/n]");
+                return ! (input.nextLine().strip().equalsIgnoreCase("n"));
+            }
+            System.out.println("---User deleted---");
+            return true;
+        }
     }
 
     public static boolean register(Scanner input){
 
         while (true) {
-            System.out.println("To cancel signing up type '0'");
+            System.out.println("[To cancel signing up type '0']");
 
             System.out.println("Username: "); String username = input.nextLine().strip();
             if(username.equals("0")) return false;
@@ -141,7 +180,7 @@ public class Main {
             ChatSystem.getInstance().registerNewUser(username, email, password);
             System.out.println("---SIGNING UP NEW USER---");
 
-            System.out.println("Press anything to continue...");
+            System.out.println("[Press anything to continue...]");
             input.nextLine();
 
             return true;

@@ -83,27 +83,26 @@ public final class ChatSystem {
         return false;
     }
 
-    public void initChat(){
-        int nUsers = 0;
-        System.out.println("---New chat---");
-        System.out.println("To");
-        while(nUsers < 2) {
+    public void listAllUsers(){
+        users.forEach((id , name) -> {
+            System.out.println("Username: " + name.getName() +
+                                "Id: [" + id + "]");
+        });
+    }
 
+    public boolean initChat(ArrayList<Integer> ids){
+        ArrayList<Integer> valid_ids = new ArrayList<>();
 
+        for(Integer i_ids : ids){
+            if(! users.containsKey(i_ids)){
+                return false;
+            }
+            else{
+                valid_ids.add(i_ids);
+            }
         }
-
-        System.out.println("");
-        // ask for at least 2 users id, or users
-        // write user name and id OR list all users
-        // listing all users
-        int j = 0;
-
-        for(Integer i : users.keySet()){
-            j++;
-            System.out.print("Name: "+users.get(i).getName()+"["+j+"]");
-            System.out.println("Id: "+users.get(i).getId());
-        }
-        chats.add(new Chat());
+        chats.add(new Chat(valid_ids));
+        return true;
     }
 
 
