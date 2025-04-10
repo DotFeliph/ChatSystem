@@ -29,6 +29,8 @@ public class User {
         return id;
     }
 
+    public User getUser(){return this;}
+
     protected User newUser(int id, String name, String email, String password){
         return new User(id, name, email, password);
     }

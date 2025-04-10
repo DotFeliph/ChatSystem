@@ -22,6 +22,18 @@ public class Chat {
         }
     }
 
+    public Chat removeUser(User u){
+        participants.remove(u);
+        return this;
+    }
+
+    public boolean isUserInChat(int id){
+        // or // User u = ChatSystem.getInstance().getUsers().get(id).getUser();
+
+        User u = ChatSystem.getInstance().searchUser(id);
+        return participants.contains(u);
+    }
+
     public ArrayList<User> getParticipants() {
         return participants;
     }

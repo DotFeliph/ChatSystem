@@ -73,24 +73,9 @@ public class Main {
                     break;
 
                 case 4: // Delete user
-                    System.out.println("---Deleting User---");
-                    System.out.print("Enter user ID: ");
-                    String del_user_id = input.nextLine().strip();
-
-                    if(! ChatSystem.getInstance().validateUserId(del_user_id))
-
-
-
-
-                    System.out.print("Enter your user ID: ");
-                    int delUserId = Integer.parseInt(input.nextLine());
-                    try {
-                        chatSystem.excluirMensagem(delConvId, msgId, delUserId);
-                        System.out.println("Message deleted!");
-                    } catch (Exception e) {
-                        System.out.println("Error: " + e.getMessage());
+                    if(! delete(input)){
+                        // didn`t delete
                     }
-                    break;
 
                 case 5: // Display Conversation
                     System.out.print("Enter conversation ID: ");
@@ -114,7 +99,9 @@ public class Main {
         input.close();
     }
 
+    public static boolean delete(Scanner input){
 
+    }
 
     public static boolean register(Scanner input){
 

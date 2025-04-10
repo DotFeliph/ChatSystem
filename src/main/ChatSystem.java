@@ -51,6 +51,11 @@ public final class ChatSystem {
 
     }
 
+    public User searchUser(int id){
+        return users.get(id).getUser();
+    }
+
+    // probably unnecessary
     public boolean validateUserId(String s_id){
         int id;
         try {
@@ -61,13 +66,18 @@ public final class ChatSystem {
         }
     }
 
-    public boolean deleteUser(){
-        int id = validadeId();
+    public boolean deleteUser(String s_id){
+        int u_id = Integer.parseInt(s_id);
 
-        if(getUsers().containsKey(id)){
-            getUsers().remove(id);
-            // remove use from all chats he was in
-            // (do i remove all the messages as well?)
+        if(users.containsKey(u_id)){
+            // iterate for every chat
+            chats.forEach(chat -> {
+                // if it finds the user
+                if(chat.isUserInChat(u_id)){
+                    // deletes it
+                    chat.removeUser(searchUser(u_id));
+                }
+            });
             return true;
         }
         return false;
