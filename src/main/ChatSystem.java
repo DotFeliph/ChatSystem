@@ -85,8 +85,12 @@ public final class ChatSystem {
     }
 
     public void listAllChats(){
-        chats.forEach(chat ->
-                System.out.println("Chat [" + chat.toString() + "]" ));
+        int i = 1;
+        for (Chat chat : chats){
+            System.out.println( i + ". Chat [" + chat.toString() + "]" );
+
+        }
+
     }
 
     public void listAllUsers(){
@@ -135,5 +139,11 @@ public final class ChatSystem {
         return null;
     }
 
+    public boolean isUserInChat(User u, Chat c){
+        return c.isUserInChat(u);
+    }
 
+    public void sendMessage(User u, Chat c, String content){
+        c.createMessage(u, content);
+    }
 }

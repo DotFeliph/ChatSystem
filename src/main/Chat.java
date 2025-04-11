@@ -7,16 +7,19 @@ import java.util.stream.Collectors;
 
 public class Chat {
 
+    int num_messages = 0;
+
     private ArrayList<User>    participants;
     private ArrayList<Message> messages;
 
     public Chat(ArrayList<Integer> ids){
         participants = new ArrayList<>();
-        messages = new ArrayList<>();
         for(Integer id : ids){
             participants.add(ChatSystem.getInstance().searchUser(id));
 
         }
+
+        messages = new ArrayList<>();
     }
 
     public Chat getChat(){return this;}
@@ -40,8 +43,15 @@ public class Chat {
         return messages;
     }
 
-    public String listParticipants(){
-        participants.
+    public boolean isUserInChat(User u){
+        return participants.contains(u);
+    }
+
+    public void createMessage(User u, String content){
+        messages.add(new Message(u.getName(), content));
+
+        // message id is [num_messages - 1]
+        messages.getLast().newId(num_messages++);
     }
 
     @Override
