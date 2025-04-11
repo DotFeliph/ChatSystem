@@ -29,6 +29,8 @@ public class User {
         return id;
     }
 
+    public boolean validatePassword(String password){return password.equals(this.password);}
+
     public User getUser(){return this;}
 
     protected User newUser(int id, String name, String email, String password){

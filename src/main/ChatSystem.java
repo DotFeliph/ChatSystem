@@ -33,14 +33,15 @@ public final class ChatSystem {
 
     public boolean validateIfEmailExist(String email) {
         // iterate for each User, and returns true if none email matches the new email
-        return users.values().stream().noneMatch(user -> user.getEmail().equals(email));
+        return users.values().stream().noneMatch(user ->
+                user.getEmail().equals(email));
     }
 
     public boolean validateUsername(String username){
         return username != null && !username.isEmpty();
     }
 
-    public boolean validatePassword(String password){return (password.length() < 7);}
+    public boolean isPasswordValid(String password){return (password.length() > 6);}
 
     public void registerNewUser(String username, String email, String password){
         // user id is [numOfUsers + 1]
@@ -83,6 +84,11 @@ public final class ChatSystem {
         return false;
     }
 
+    public void listAllChats(){
+        chats.forEach(chat ->
+                System.out.println("Chat [" + chat.toString() + "]" ));
+    }
+
     public void listAllUsers(){
         users.forEach((id , name) -> {
             System.out.println("Username: " + name.getName() +
@@ -116,5 +122,18 @@ public final class ChatSystem {
     public ArrayList<Chat> getChats() {
         return this.chats;
     }
+
+    //user validation
+
+    public User authenticateUser(String email, String password) {
+        for(User user : users.values()) {
+            if(user.getEmail().equalsIgnoreCase(email) &&
+                    user.validatePassword(password)) {
+                return user;
+            }
+        }
+        return null;
+    }
+
 
 }

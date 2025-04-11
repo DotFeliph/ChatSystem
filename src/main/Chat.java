@@ -2,6 +2,8 @@ package main;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Chat {
 
@@ -9,7 +11,6 @@ public class Chat {
     private ArrayList<Message> messages;
 
     public Chat(ArrayList<Integer> ids){
-
         participants = new ArrayList<>();
         messages = new ArrayList<>();
         for(Integer id : ids){
@@ -39,4 +40,16 @@ public class Chat {
         return messages;
     }
 
+    public String listParticipants(){
+        participants.
+    }
+
+    @Override
+    public String toString() {
+
+        return participants.stream()
+                .map(User::getName)
+                .collect(Collectors.joining(", "));
+
+    }
 }
