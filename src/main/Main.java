@@ -87,14 +87,21 @@ public class Main {
                     }
 
                 case 3: // Send Message
-
-
+                    // TODO: cancel operation
+                    sendMessage(input, user);
                     break;
-                case 5: // Display Conversation
+                case 4: // Display Conversation
+                    if(ChatSystem.getInstance().getChats().isEmpty()){
+                        System.out.println("---You did not started a chat yet---");
+                    }
+
+                    ChatSystem.getInstance().listAllChats();
                     System.out.print("Enter conversation ID: ");
-                    int displayConvId = Integer.parseInt(input.nextLine());
+                    int display_chat_id = Integer.parseInt(input.nextLine());
+                    Chat chat = ChatSystem.getInstance().getChats().get(display_chat_id);
+
                     try {
-//                        chatSystem.exibirConversa(displayConvId);
+                        //ChatSystem.getInstance().showChat(Chat chat);
                     } catch (Exception e) {
                         System.out.println("Error: " + e.getMessage());
                     }

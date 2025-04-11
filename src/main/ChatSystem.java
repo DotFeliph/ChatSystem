@@ -146,4 +146,7 @@ public final class ChatSystem {
     public void sendMessage(User u, Chat c, String content){
         c.createMessage(u, content);
     }
+    public void showChat(Chat c){
+
+    }
 }
