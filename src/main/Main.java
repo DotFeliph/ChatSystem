@@ -139,11 +139,13 @@ public class Main {
                 System.out.println("A chat requires at least 2 participants.");
                 continue;
             }
+
             if(! ChatSystem.getInstance().initChat(participants)){
                 System.out.println("Error when creating the chat");
                 System.out.println("Do you want do try agai? [y/n]");
                 return ! (input.nextLine().strip().equalsIgnoreCase("n"));
             }
+
             System.out.println("---New chat created---");
             return true;
         }
@@ -234,21 +236,33 @@ public class Main {
         return user;
     }
 
-        public static  void sendMessage(Scanner input){
-
-            System.out.print("Enter conversation ID: ");
-            int conversationId = Integer.parseInt(input.nextLine());
-            System.out.print("Enter your user ID: ");
-            int userId = Integer.parseInt(input.nextLine());
-            System.out.print("Enter message: ");
-            String message = input.nextLine();
-            try {
-//                        chatSystem.enviarMensagem(conversationId, userId, message);
-                System.out.println("Message sent!");
-            } catch (Exception e) {
-                System.out.println("Error: " + e.getMessage());
-            }
-            break;
+    public static void sendMessage(Scanner input, User user){
+        if(ChatSystem.getInstance().getChats().isEmpty()){
+            createChat(input);
         }
+
+        ChatSystem.getInstance().listAllChats();
+
+        System.out.print("Enter conversation ID: ");
+        int conversation_id = Integer.parseInt(input.nextLine());
+
+        final Chat chat = ChatSystem.getInstance().getChats().get(conversation_id);
+
+        if(! ChatSystem.getInstance().isUserInChat(user, chat)){
+            System.out.println("Only participants of the chat can send messages");
+            System.out.println("[Press anything to continue...]");
+            input.nextLine();
+            return;
+        }
+
+        System.out.print("Enter message: ");
+        String message = input.nextLine();
+        try {
+            ChatSystem.getInstance().sendMessage(user, chat, message);
+            System.out.println("---Message sent---");
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
 }
 
