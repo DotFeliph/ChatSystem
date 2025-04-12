@@ -1,8 +1,6 @@
 package main;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.stream.Collectors;
 
 public class Chat {
@@ -22,10 +20,10 @@ public class Chat {
         messages = new ArrayList<>();
     }
 
-    public Chat getChat(){return this;}
-
     public void removeUser(User u){
         participants.remove(u);
+        // todo: remove messages user sent
+
     }
 
     public boolean isUserInChat(int id){
@@ -54,13 +52,21 @@ public class Chat {
         messages.getLast().newId(num_messages++);
     }
 
-    @Override
-    public String toString() {
-
+    public String showParticipants() {
         return participants.stream()
                 .map(User::getName)
                 .collect(Collectors.joining(", "));
 
+    }
+
+    public String toString() {
+        if (messages.isEmpty()) {
+            return "Chat is empty.";
+        }
+
+        return messages.stream()
+                .map(Message::toString)
+                .collect(Collectors.joining("\n"));
     }
 
 }

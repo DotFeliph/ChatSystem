@@ -1,17 +1,11 @@
 package main;
 
-import jdk.jshell.Snippet;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.InputMismatchException;
-import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.*;
 
 public final class ChatSystem {
 
-    private Integer numOfUsers = Integer.valueOf(0);
+    private Integer numOfUsers = 0;
 
     private HashMap<Integer, User>  users    = new HashMap<>();          // store all users
     private ArrayList<Chat>         chats    = new ArrayList<>();        // store all chats
@@ -25,7 +19,7 @@ public final class ChatSystem {
         return instance;
     }
 
-    public boolean validateEmail(String email) {
+    private boolean validateEmail(String email) {
         return validateIfEmailExist(email) && validateEmailFormat(email);
     }
 
@@ -44,9 +38,9 @@ public final class ChatSystem {
     public boolean isPasswordValid(String password){return (password.length() > 6);}
 
     public void registerNewUser(String username, String email, String password){
-        // user id is [numOfUsers + 1]
+        // user id is [numOfUsers]
         users.put(
-                numOfUsers++,
+                ++numOfUsers,
                 new User(numOfUsers, username, email, password)
         );
 
@@ -58,9 +52,8 @@ public final class ChatSystem {
 
     // probably unnecessary
     public boolean validateUserId(String s_id){
-        int id;
         try {
-            id = Integer.parseInt(s_id);
+             Integer.parseInt(s_id);
             return true;
         } catch (NumberFormatException | NullPointerException e) {
             return false;
@@ -79,6 +72,7 @@ public final class ChatSystem {
                     chat.removeUser(searchUser(u_id));
                 }
             });
+            users.remove(u_id);
             return true;
         }
         return false;
@@ -87,7 +81,7 @@ public final class ChatSystem {
     public void listAllChats(){
         int i = 1;
         for (Chat chat : chats){
-            System.out.println( i + ". Chat [" + chat.toString() + "]" );
+            System.out.println( i + ". Chat [" + chat.showParticipants() + "]" );
 
         }
 
@@ -100,8 +94,18 @@ public final class ChatSystem {
         });
     }
 
-    public boolean initChat(ArrayList<Integer> ids){
+    public void listAllUsers(User user){
+        users.forEach((id , name) -> {
+            if(! id.equals(user.getId())){
+                System.out.println("Username: " + name.getName() +
+                "   Id: [" + id + "]");
+            }
+        });
+    }
+
+    public boolean initChat(ArrayList<Integer> ids, User user){
         ArrayList<Integer> valid_ids = new ArrayList<>();
+        valid_ids.add(user.getId());
 
         for(Integer i_ids : ids){
             if(! users.containsKey(i_ids)){
@@ -115,10 +119,6 @@ public final class ChatSystem {
         return true;
     }
 
-    public void userLogin(){
-
-    }
-
     public HashMap<Integer, User> getUsers() {
         return this.users;
     }
@@ -126,8 +126,6 @@ public final class ChatSystem {
     public ArrayList<Chat> getChats() {
         return this.chats;
     }
-
-    //user validation
 
     public User authenticateUser(String email, String password) {
         for(User user : users.values()) {
@@ -146,7 +144,18 @@ public final class ChatSystem {
     public void sendMessage(User u, Chat c, String content){
         c.createMessage(u, content);
     }
-    public void showChat(Chat c){
 
+    // SU validation
+    public boolean authenticateSuperUser(String username, String password) {
+        String su_username = "admin";
+        String su_password = "admin";
+        return Objects.equals(username, su_username)
+                && Objects.equals(password, su_password);
+
+    }
+
+    public void showChat(Chat c){
+        // todo: only show messages from current participants of the chat
+        System.out.println(c.toString());
     }
 }
